@@ -65,6 +65,12 @@ class Storage
 
     public function wPeerAdd(string $userId, int $nodeNumber, string $profileId, string $displayName, string $publicKey, string $ipFour, string $ipSix, DateTimeImmutable $createdAt, DateTimeImmutable $expiresAt, ?string $authKey): void
     {
+	if(!($this->userExists($userId)))
+        {
+                $permissionList = array();
+                $userinfo = new UserInfo($userId, $permissionList);
+                $this->userAdd($userinfo, new DateTimeImmutable('now'));
+        }
         $stmt = $this->db->prepare(
             <<< 'SQL'
                 INSERT

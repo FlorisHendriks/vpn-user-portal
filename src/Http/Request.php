@@ -55,6 +55,16 @@ class Request
         );
     }
 
+public function getClientVerification(): string
+{
+        return $this->requireHeader('SSL_CLIENT_VERIFY');
+}
+
+public function getUserId(): string
+{
+        return $this->requireHeader('SSL_CLIENT_S_DN_CN');
+}
+
     public function getScheme(): string
     {
         $requestScheme = 'http';

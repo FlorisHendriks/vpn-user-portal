@@ -56,7 +56,20 @@ class ApiService implements ApiServiceInterface
     {
         $requestMethod = $request->getRequestMethod();
         $pathInfo = $request->getPathInfo();
-
+	if($pathInfo === "/v3/provision")
+	{
+	   $clientVerified = $request->getClientVerification();
+           if($clientVerified === 'SUCCESS')
+           {
+                return $this->routeList[$pathInfo][$requestMethod]($request);
+           }
+           else
+           {
+                throw new HttpException('certificate not accepted',403);
+           }
+	}
+	else
+	{
         try {
             $accessToken = $this->bearerValidator->validate();
             $accessToken->scope()->requireAll(['config']);
@@ -84,5 +97,6 @@ class ApiService implements ApiServiceInterface
                 $e->statusCode()
             );
         }
+	}
     }
 }
